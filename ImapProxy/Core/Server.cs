@@ -1,10 +1,19 @@
-﻿namespace Core
+﻿using System.Net.Sockets;
+
+namespace Core
 {
     public class Server
     {
-        public Server(int port)
+        private readonly TcpListener _listener;
+
+        public Server(TcpListener listener)
         {
-            
+            _listener = listener;
+        }
+
+        public void Serve()
+        {
+            _listener.Start();
         }
     }
 }
