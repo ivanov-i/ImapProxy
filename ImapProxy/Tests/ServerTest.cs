@@ -1,14 +1,16 @@
 ﻿using System;
+using Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class ServerTest
     {
         [TestMethod]
-        public void TestMethod1()
+        public void Constructor()
         {
+            var server = new Server(10);
         }
     }
 }
