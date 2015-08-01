@@ -3,8 +3,8 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Core
 {
-    public interface IWorker
+    public interface IServer
     {
-        void Work(TcpClient client);
+        void Serve(TcpClient client);
     }
 }

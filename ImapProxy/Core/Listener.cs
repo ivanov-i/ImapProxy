@@ -2,22 +2,22 @@
 
 namespace Core
 {
-    public class Server
+    public class Listener
     {
         private readonly TcpListener _listener;
-        private readonly IWorker _worker;
+        private readonly IServer _server;
 
-        public Server(TcpListener listener, IWorker worker)
+        public Listener(TcpListener listener, IServer server)
         {
             _listener = listener;
-            _worker = worker;
+            _server = server;
         }
 
-        public async void Serve()
+        public async void Listen()
         {
             _listener.Start();
             var client = await _listener.AcceptTcpClientAsync();
-            _worker.Work(client);
+            _server.Serve(client);
         }
     }
 }

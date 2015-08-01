@@ -8,10 +8,10 @@ namespace Tests
     [TestClass]
     public class ServerTest
     {
-        public class Worker : IWorker
+        public class Server : IServer
         {
             public static bool Worked { get; set; }
-            public void Work(TcpClient client)
+            public void Serve(TcpClient client)
             {
                 Worked = true;
             }
@@ -21,15 +21,15 @@ namespace Tests
         public void ListensOnListenerAndAccepts()
         {
             var listener = new TcpListener(IPAddress.Any, 0);
-            var server = new Server(listener, new Worker());
-            server.Serve();
+            var server = new Listener(listener, new Server());
+            server.Listen();
             var endPoint = (IPEndPoint)listener.LocalEndpoint;
             var port = endPoint.Port;
             Assert.AreNotEqual(0, port);
             var client = new TcpClient("localhost", port);
             Assert.IsTrue(client.Connected);
             listener.Stop();
-            Assert.IsTrue(Worker.Worked);
+            Assert.IsTrue(Server.Worked);
         }
     }
 }
