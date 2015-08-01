@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 
 namespace Core
 {
@@ -16,8 +17,15 @@ namespace Core
         public async void Listen()
         {
             _listener.Start();
-            var client = await _listener.AcceptTcpClientAsync();
-            _server.Serve(client);
+            try
+            {
+                var client = await _listener.AcceptTcpClientAsync();
+                _server.Serve(client);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -10,26 +11,31 @@ namespace Tests
     {
         public class Server : IServer
         {
-            public static bool Worked { get; set; }
+            private static readonly AutoResetEvent H = new AutoResetEvent(false);
             public void Serve(TcpClient client)
             {
-                Worked = true;
+                H.Set();
+            }
+
+            public static bool Wait()
+            {
+                return H.WaitOne(5000);
             }
         }
 
         [TestMethod]
         public void ListensOnListenerAndAccepts()
         {
-            var listener = new TcpListener(IPAddress.Any, 0);
-            var server = new Listener(listener, new Server());
-            server.Listen();
-            var endPoint = (IPEndPoint)listener.LocalEndpoint;
+            var tcpListener = new TcpListener(IPAddress.Any, 0);
+            var listener = new Listener(tcpListener, new Server());
+            listener.Listen();
+            var endPoint = (IPEndPoint)tcpListener.LocalEndpoint;
             var port = endPoint.Port;
             Assert.AreNotEqual(0, port);
             var client = new TcpClient("localhost", port);
             Assert.IsTrue(client.Connected);
-            listener.Stop();
-            Assert.IsTrue(Server.Worked);
+            Assert.IsTrue(Server.Wait());
+            tcpListener.Stop();
         }
     }
 }
