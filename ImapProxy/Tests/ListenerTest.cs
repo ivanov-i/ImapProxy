@@ -9,7 +9,7 @@ namespace Tests
     [TestClass]
     public class ListenerTest
     {
-        public class Server : IServer
+        private class Server : IServer
         {
             private readonly CountdownEvent _workersCounter;
 

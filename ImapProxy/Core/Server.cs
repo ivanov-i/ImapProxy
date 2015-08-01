@@ -1,12 +1,19 @@
-﻿using System.Net.Sockets;
+﻿using System;
 
 namespace Core
 {
-    class Server : IServer
+    public class Server : IServer
     {
+        private readonly Action<IWorkItem> _workFunction;
+
+        public Server(Action<IWorkItem> workFunction)
+        {
+            _workFunction = workFunction;
+        }
+
         public void Serve(IWorkItem client)
         {
-            throw new System.NotImplementedException();
+            _workFunction(client);
         }
     }
 }
