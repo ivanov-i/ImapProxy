@@ -16,11 +16,14 @@ namespace Core
 
         public async void Listen()
         {
-            _listener.Start();
+            _listener.Start(10000);
             try
             {
-                var client = await _listener.AcceptTcpClientAsync();
-                _server.Serve(client);
+                while (true)
+                {
+                    var client = await _listener.AcceptTcpClientAsync();
+                    _server.Serve(client);
+                }
             }
             catch (Exception e)
             {
