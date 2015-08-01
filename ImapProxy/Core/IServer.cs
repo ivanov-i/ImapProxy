@@ -1,9 +1,7 @@
-﻿using System.Net.Sockets;
-
-namespace Core
+﻿namespace Core
 {
     public interface IServer
     {
-        void Serve(TcpClient client);
+        void Serve(IWorkItem client);
     }
 }

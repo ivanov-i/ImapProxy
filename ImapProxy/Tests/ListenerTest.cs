@@ -18,7 +18,7 @@ namespace Tests
                 _workersCounter = new CountdownEvent(n);
             }
 
-            public void Serve(TcpClient client)
+            public void Serve(IWorkItem client)
             {
                 _workersCounter.Signal();
             }
@@ -51,14 +51,14 @@ namespace Tests
         public void StressTest()
         {
             Assert.Inconclusive("This one takes about a minute");
-            VerifyConnections(100000);
+//            VerifyConnections(100000);
         }
 
         private static void VerifyConnections(int n)
         {
             var server = new Server(n);
             var tcpListener = new TcpListener(IPAddress.Any, 0);
-            var listener = new Listener(tcpListener, server);
+            var listener = new Listener(tcpListener, server, new FakeWorkItemFactory());
             listener.Listen();
             var endPoint = (IPEndPoint)tcpListener.LocalEndpoint;
             var port = endPoint.Port;
@@ -71,6 +71,15 @@ namespace Tests
             }
             Assert.IsTrue(server.Wait());
             tcpListener.Stop();
+        }
+    }
+
+    internal class FakeWorkItemFactory : IWorkItemFactory
+    {
+        public IWorkItem CreateWorkItem(TcpClient client)
+        {
+            client.Close();
+            return null;
         }
     }
 }
