@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Core
 {
@@ -11,9 +12,9 @@ namespace Core
             _workFunction = workFunction;
         }
 
-        public void Serve(IWorkItem client)
+        public async void Serve(IWorkItem client)
         {
-            _workFunction(client);
+            await Task.Run(() => _workFunction(client));
         }
     }
 }
