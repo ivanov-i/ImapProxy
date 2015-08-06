@@ -18,7 +18,7 @@ namespace Tests
                 _workersCounter = new CountdownEvent(n);
             }
 
-            public void Serve(IWorkItem client)
+            public void Serve(TcpClient client)
             {
                 _workersCounter.Signal();
             }
@@ -58,7 +58,7 @@ namespace Tests
         {
             var server = new Server(n);
             var tcpListener = new TcpListener(IPAddress.Any, 0);
-            var listener = new Listener(tcpListener, server, new FakeWorkItemFactory());
+            var listener = new Listener(tcpListener, server);
             listener.Listen();
             var endPoint = (IPEndPoint)tcpListener.LocalEndpoint;
             var port = endPoint.Port;
@@ -71,15 +71,6 @@ namespace Tests
             }
             Assert.IsTrue(server.Wait());
             tcpListener.Stop();
-        }
-    }
-
-    internal class FakeWorkItemFactory : IWorkItemFactory
-    {
-        public IWorkItem CreateWorkItem(TcpClient client)
-        {
-            client.Close();
-            return null;
         }
     }
 }

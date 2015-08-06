@@ -9,18 +9,6 @@ namespace Tests
     public class ServerTest
     {
         [TestMethod]
-        public void StartsWorker()
-        {
-            var workDone = false;
-            var server = new Server(item =>
-            {
-                workDone = true;
-            });
-            server.Serve(null);
-            Assert.IsTrue(workDone);
-        }
-
-        [TestMethod]
         public void StartsWorkerAsync()
         {
             var workerWaits = new AutoResetEvent(false);
